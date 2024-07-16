@@ -1,6 +1,6 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}_${PV}:"
 
-DEPENDS:append += "u-boot-tools-native"
+DEPENDS:append = " u-boot-tools-native python3-setuptools-native"
 
 require recipes-bsp/u-boot/u-boot-netfield.inc
 
