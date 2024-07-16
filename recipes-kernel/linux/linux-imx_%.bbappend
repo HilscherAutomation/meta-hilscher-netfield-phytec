@@ -12,6 +12,7 @@ KCONFIG_MODE = "--alldefconfig"
 KMETA = "kernel-meta"
 SRC_URI:append = " git://git.yoctoproject.org/yocto-kernel-cache;type=kmeta;name=meta;branch=yocto-5.15;destsuffix=${KMETA}"
 SRCREV_meta = "52fd26ad165fc5bef6e38651df39bf552e5bb845"
+SRCREV_FORMAT = "meta_${@d.getVar('SRCREV', True)[:10]}"
 # ----------------------------------
 
 KERNEL_FEATURES:append = " features/bluetooth/bluetooth.scc features/bluetooth/bluetooth-usb.scc features/rfkill/rfkill.scc"
