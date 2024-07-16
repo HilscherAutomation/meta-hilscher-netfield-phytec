@@ -9,8 +9,13 @@ BBLAYERS ?= " \
   ${TOPDIR}/../meta-hilscher-netfield \
   ${TOPDIR}/../poky/meta \
   ${TOPDIR}/../poky/meta-poky \
-  ${TOPDIR}/../meta-hilscher-netfield/meta-oem \
   ${TOPDIR}/../meta-hilscher-netfield-phytec \
+  ${TOPDIR}/../meta-hilscher-drivers \
+  ${TOPDIR}/../meta-rust \
+  ${TOPDIR}/../meta-clang \
+  ${TOPDIR}/../meta-security \
+  ${TOPDIR}/../meta-security/meta-tpm \
+  ${TOPDIR}/../meta-gplv2 \
   ${TOPDIR}/../meta-openembedded/meta-oe \
   ${TOPDIR}/../meta-openembedded/meta-networking \
   ${TOPDIR}/../meta-openembedded/meta-python \
@@ -18,12 +23,9 @@ BBLAYERS ?= " \
   ${TOPDIR}/../meta-openembedded/meta-filesystems \
   ${TOPDIR}/../meta-openembedded/meta-perl \
   ${TOPDIR}/../meta-freescale \
-  ${TOPDIR}/../meta-rauc \
-  ${TOPDIR}/../meta-qt6 \
+  ${TOPDIR}/../meta-imx/meta-bsp \
   ${TOPDIR}/../meta-arm/meta-arm \
   ${TOPDIR}/../meta-arm/meta-arm-toolchain \
-  ${TOPDIR}/../meta-ampliphy \
-  ${TOPDIR}/../meta-qt6-phytec \
   ${TOPDIR}/../meta-phytec \
   ${TOPDIR}/../meta-openembedded/meta-webserver \
   ${TOPDIR}/../meta-swupdate \
