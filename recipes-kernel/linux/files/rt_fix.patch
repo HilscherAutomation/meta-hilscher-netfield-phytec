@@ -1,0 +1,24 @@
+diff -aurN a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-ceetm.h b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-ceetm.h
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-ceetm.h	2024-03-18 16:08:57.065756651 +0100
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth-ceetm.h	2024-03-20 08:52:43.285482116 +0100
+@@ -168,7 +168,7 @@
+ 
+ struct dpaa2_ceetm_class_stats {
+ 	/* Software counters */
+-	struct gnet_stats_basic_packed bstats;
++	struct gnet_stats_basic_sync bstats;
+ 	__u32 ern_drop_count;
+ };
+ 
+diff -aurN a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth_ceetm.h b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth_ceetm.h
+--- a/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth_ceetm.h	2024-03-18 16:08:57.077756979 +0100
++++ b/drivers/net/ethernet/freescale/sdk_dpaa/dpaa_eth_ceetm.h	2024-03-20 08:52:59.926421067 +0100
+@@ -224,7 +224,7 @@
+ 
+ struct ceetm_class_stats {
+ 	/* Software counters */
+-	struct gnet_stats_basic_packed bstats;
++	struct gnet_stats_basic_sync bstats;
+ 	__u32 ern_drop_count;
+ 	__u32 congested_count;
+ };
