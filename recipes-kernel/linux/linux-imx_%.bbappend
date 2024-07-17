@@ -29,9 +29,6 @@ SRC_URI:append = " \
 # Enable module for qemu support
 SRC_URI:append = " file://binfmt_misc.cfg"
 
-# TODO: Disable checking of signature check for fitimage as it does not work
-DISABLE_FIT_SIGNATURE_CHECK="1"
-
 do_hilscher_deploy() {
     kernel=$(find ${DEPLOYDIR} -type f -name "fitImage-core-image-minimal-initramfs-*.bin")
     cp -a $(readlink -f $kernel) "${hd_path}/"
@@ -60,3 +57,8 @@ do_kernel_configme:append() {
     fi
 }
 # ----------
+
+# Don't use u-boot-mkimage to add public key, as this does not work well with out pkcs11 infrastructure
+UBOOT_DTB_BINARY=""
+# TODO: Disable checking of signature check for fitimage as it does not work
+DISABLE_FIT_SIGNATURE_CHECK="1"

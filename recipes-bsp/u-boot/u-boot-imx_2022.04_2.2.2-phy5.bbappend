@@ -10,13 +10,9 @@ SRC_URI:append = " \
 	file://0001-Changed-config-file-from-machine-to-distro-specific-.patch \
 	"
 
-inherit hilscher-deploy
-
-hd_path = "${HDEPLOY_PATH_EXTRAS}/bootloader"
-
-do_hilscher_deploy() {
-	cd ${DEPLOYDIR}
-	cp -a $(readlink flash.bin) ${hd_path}/
-}
-do_hilscher_deploy[cleandirs] = "${hd_path}/"
-addtask hilscher_deploy before do_build after do_deploy
+inherit dts-sign
+# Setup public key patching into dts
+DTS_SIGN_ENFORCE="${PLATFORM_SIGN}"
+DTS_SIGN_KEY_DIR="${PLATFORM_KEYDIR}"
+DTS_SIGN_KEY_NAME="${PLATFORM_KEYNAME}"
+DTS_TO_SIGN="${@d.getVar('S') + '/arch/arm/dts/' + d.getVar('UBOOT_DTB_NAME').replace('.dtb','.dts')}"
