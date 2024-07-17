@@ -62,3 +62,5 @@ do_kernel_configme:append() {
 UBOOT_DTB_BINARY=""
 # TODO: Disable checking of signature check for fitimage as it does not work
 DISABLE_FIT_SIGNATURE_CHECK="1"
+# We need a link in deploydir for rootfs generation, but meta-phytec disabled it
+KERNEL_ARTIFACT_LINK_NAME = "${MACHINE}"

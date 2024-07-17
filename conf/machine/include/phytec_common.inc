@@ -41,13 +41,17 @@ UBOOT_MKIMAGE_DTCOPTS = "-I dts -O dtb -p 2000"
 # Contents of boot partition (excluding rootfs)
 #############################################################################
 IMAGE_BOOT_FILES = " \
+    ${IMAGE_BOOTLOADER};boot.bin \
+    boot-script-fit/fitImage-boot-menu.scr;boot-fit.scr \
 "
 
 #############################################################################
 # WIC images
 #############################################################################
 WIC_IMAGE_DEPENDENCIES:append = " boot-script-fit"
-WKS_FILE = "hilscher-gpt-boot-rescue-system-lvm.wks.in"
+IMAGE_BOOTLOADER = "imx-boot"
+WICVARS:append = " IMAGE_BOOTLOADER"
+WKS_FILES:${MACHINE} = "hilscher-gpt-boot-rescue-system-lvm.wks.in"
 
 WIC_BOOT_PART_CONTENT ??= ""
 WIC_RESCUE_PART_CONTENT ??= ""
