@@ -1,31 +1,20 @@
-diff -aurN a/include/configs/imx8mp_evk.h b/include/configs/imx8mp_evk.h
---- a/include/configs/imx8mp_evk.h	2024-07-18 10:25:04.368624823 +0200
-+++ b/include/configs/imx8mp_evk.h	2024-07-18 10:46:39.553517849 +0200
-@@ -10,6 +10,7 @@
- #include <linux/stringify.h>
- #include <asm/arch/imx-regs.h>
- #include "imx_env.h"
+diff -aurN a/include/configs/phycore_imx8mp.h b/include/configs/phycore_imx8mp.h
+--- a/include/configs/phycore_imx8mp.h	2024-07-18 11:10:52.593498483 +0200
++++ b/include/configs/phycore_imx8mp.h	2024-07-18 12:50:19.969456714 +0200
+@@ -140,7 +140,8 @@
+ 		"fi;\0" \
+ 	"raucdev=2\0" \
+ 	PHYCORE_RAUC_ENV_BOOTLOGIC \
+-	PHYCORE_FITIMAGE_ENV_BOOTLOGIC
++	PHYCORE_FITIMAGE_ENV_BOOTLOGIC \
++	NETIOT_CONFIG_EXTRA_ENV_SETTINGS
+ 
+ #ifdef CONFIG_ENV_WRITEABLE_LIST
+ /* Set environment flag validation to a list of env vars that must be writable */
+@@ -178,4 +179,6 @@
+ #define CONFIG_USB_MAX_CONTROLLER_COUNT         2
+ #define CONFIG_SERIAL_TAG
+ 
 +#include "netiot_distro_config.h"
- 
- #define CONFIG_SYS_BOOTM_LEN		(32 * SZ_1M)
- 
-@@ -110,7 +111,8 @@
- 		"\0" \
- 	"bootcmd=nand read ${loadaddr} 0x5000000 0x2000000;"\
- 		"nand read ${fdt_addr_r} 0x7000000 0x100000;"\
--		"booti ${loadaddr} - ${fdt_addr_r}"
-+		"booti ${loadaddr} - ${fdt_addr_r}" \
-+	NETIOT_CONFIG_EXTRA_ENV_SETTINGS
- 
- #else
- #define CONFIG_EXTRA_ENV_SETTINGS		\
-@@ -182,7 +184,8 @@
- 			   "else run netboot; " \
- 			   "fi; " \
- 		   "fi; " \
--	   "fi;"
-+	   "fi;" \
-+	NETIOT_CONFIG_EXTRA_ENV_SETTINGS
- #endif
- 
- /* Link Definitions */
++
+ #endif /* __PHYCORE_IMX8MP_H */

@@ -16,3 +16,7 @@ DTS_SIGN_ENFORCE="${PLATFORM_SIGN}"
 DTS_SIGN_KEY_DIR="${PLATFORM_KEYDIR}"
 DTS_SIGN_KEY_NAME="${PLATFORM_KEYNAME}"
 DTS_TO_SIGN="${@d.getVar('S') + '/arch/arm/dts/' + d.getVar('UBOOT_DTB_NAME').replace('.dtb','.dts')}"
+
+do_configure:prepend() {
+    cp ${WORKDIR}/machine_config.h ${S}/include/configs/
+}
