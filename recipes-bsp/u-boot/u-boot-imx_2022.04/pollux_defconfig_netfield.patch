@@ -1,0 +1,52 @@
+diff -aurN a/arch/arm/mach-imx/mmc_env.c b/arch/arm/mach-imx/mmc_env.c
+--- a/arch/arm/mach-imx/mmc_env.c	2024-07-18 11:05:40.400973478 +0200
++++ b/arch/arm/mach-imx/mmc_env.c	2024-07-18 11:09:03.442519312 +0200
+@@ -10,6 +10,8 @@
+ #include <asm/mach-imx/boot_mode.h>
+ #include <env.h>
+ 
++#if defined(CONFIG_ENV_IS_IN_MMC)
++
+ __weak int board_mmc_get_env_dev(int devno)
+ {
+ 	return devno;
+@@ -28,3 +30,5 @@
+ 
+ 	return board_mmc_get_env_dev(devno);
+ }
++
++#endif
+diff -aurN a/configs/phycore-imx8mp_defconfig b/configs/phycore-imx8mp_defconfig
+--- a/configs/phycore-imx8mp_defconfig	2024-07-18 11:02:40.584055912 +0200
++++ b/configs/phycore-imx8mp_defconfig	2024-07-18 11:10:20.732629005 +0200
+@@ -77,8 +77,6 @@
+ CONFIG_SPL_OF_CONTROL=y
+ CONFIG_ENV_OVERWRITE=y
+ CONFIG_ENV_IS_NOWHERE=y
+-CONFIG_ENV_IS_IN_MMC=y
+-CONFIG_ENV_IS_IN_SPI_FLASH=y
+ CONFIG_SYS_REDUNDAND_ENVIRONMENT=y
+ CONFIG_SYS_RELOC_GD_ENV_ADDR=y
+ CONFIG_SYS_MMC_ENV_DEV=2
+@@ -156,3 +154,21 @@
+ CONFIG_IMX_WATCHDOG=y
+ CONFIG_OF_LIBFDT_OVERLAY=y
+ CONFIG_FDT_FIXUP_PARTITIONS=y
++
++CONFIG_PARTITION_TYPE_GUID=y
++
++CONFIG_MENU=y
++CONFIG_CMD_BOOTMENU=y
++CONFIG_CMD_IMPORTENV=y
++
++CONFIG_CMD_PART=y
++
++CONFIG_SPL_DM_SEQ_ALIAS=y
++
++CONFIG_CMD_PXE=y
++CONFIG_USE_PREBOOT=y
++
++CONFIG_BOOTDELAY=0
++
++CONFIG_FIT_SIGNATURE=y
++#CONFIG_LEGACY_IMAGE_FORMAT is not set

@@ -6,8 +6,8 @@ require recipes-bsp/u-boot/u-boot-netfield.inc
 
 SRC_URI:append = " \
 	file://machine_config.h \
-	file://defconfig \
 	file://0001-Changed-config-file-from-machine-to-distro-specific-.patch \
+        file://pollux_defconfig_netfield.patch \
 	"
 
 inherit dts-sign

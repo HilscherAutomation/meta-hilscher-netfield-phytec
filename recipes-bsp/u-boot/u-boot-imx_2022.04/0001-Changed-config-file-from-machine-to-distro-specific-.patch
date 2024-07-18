@@ -1,14 +1,31 @@
-Changed config file frommachine to distro specific
----
-diff -aurN a/include/configs/imx_env.h b/include/configs/imx_env.h
---- a/include/configs/imx_env.h	2024-02-23 08:39:26.323296177 +0100
-+++ b/include/configs/imx_env.h	2024-02-23 10:10:00.241757572 +0100
-@@ -6,6 +6,8 @@
- #ifndef __IMX_COMMON_CONFIG_H
- #define __IMX_COMMON_CONFIG_H
- 
+diff -aurN a/include/configs/imx8mp_evk.h b/include/configs/imx8mp_evk.h
+--- a/include/configs/imx8mp_evk.h	2024-07-18 10:25:04.368624823 +0200
++++ b/include/configs/imx8mp_evk.h	2024-07-18 10:46:39.553517849 +0200
+@@ -10,6 +10,7 @@
+ #include <linux/stringify.h>
+ #include <asm/arch/imx-regs.h>
+ #include "imx_env.h"
 +#include "netiot_distro_config.h"
-+
- #ifdef CONFIG_ARM64
-     #define MFG_BOOT_CMD "booti "
+ 
+ #define CONFIG_SYS_BOOTM_LEN		(32 * SZ_1M)
+ 
+@@ -110,7 +111,8 @@
+ 		"\0" \
+ 	"bootcmd=nand read ${loadaddr} 0x5000000 0x2000000;"\
+ 		"nand read ${fdt_addr_r} 0x7000000 0x100000;"\
+-		"booti ${loadaddr} - ${fdt_addr_r}"
++		"booti ${loadaddr} - ${fdt_addr_r}" \
++	NETIOT_CONFIG_EXTRA_ENV_SETTINGS
+ 
  #else
+ #define CONFIG_EXTRA_ENV_SETTINGS		\
+@@ -182,7 +184,8 @@
+ 			   "else run netboot; " \
+ 			   "fi; " \
+ 		   "fi; " \
+-	   "fi;"
++	   "fi;" \
++	NETIOT_CONFIG_EXTRA_ENV_SETTINGS
+ #endif
+ 
+ /* Link Definitions */
