@@ -1,0 +1,64 @@
+From 3dd4b5a205c443dddffb44e9219bbbaf80ed9bc1 Mon Sep 17 00:00:00 2001
+From: Ali Tekin <ATekin@hilscher.com>
+Date: Fri, 19 Jul 2024 09:10:22 +0200
+Subject: [PATCH] fix boot script issues related to unit addressing
+
+---
+ boot/image-fit-sig.c | 21 ++++++++++++++-------
+ boot/image-fit.c     | 11 +++++++++--
+ 2 files changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/boot/image-fit-sig.c b/boot/image-fit-sig.c
+index a461d591a0e..709f87a000d 100644
+--- a/boot/image-fit-sig.c
++++ b/boot/image-fit-sig.c
+@@ -478,13 +478,20 @@ static int fit_config_verify_required_keys(const void *fit, int conf_noffset,
+ 	bool reqd_policy_all = true;
+ 	const char *reqd_mode;
+ 
+-	/*
+-	 * We don't support this since libfdt considers names with the
+-	 * name root but different @ suffix to be equal
+-	 */
+-	if (strchr(name, '@')) {
+-		printf("Configuration node '%s' contains '@'\n", name);
+-		return -EPERM;
++	/* Skip the check/error if the name matches one of the following strings ... */
++	if ( (strcmp(name, "kernel@1")) &&
++		 (strcmp(name, "script@1")) &&
++		 (strcmp(name, "conf@1")) &&
++		 (strcmp(name, "hash@1")) &&
++		 (strcmp(name, "signature@1")) ) {
++		/*
++		* We don't support this since libfdt considers names with the
++		* name root but different @ suffix to be equal
++		*/
++		if (strchr(name, '@')) {
++			printf("Configuration node '%s' contains '@'\n", name);
++			return -EPERM;
++		}
+ 	}
+ 
+ 	/* Work out what we need to verify */
+diff --git a/boot/image-fit.c b/boot/image-fit.c
+index 0de9180d2bb..0d9fd8b9463 100644
+--- a/boot/image-fit.c
++++ b/boot/image-fit.c
+@@ -1597,8 +1597,15 @@ static int fdt_check_no_at(const void *fit, int parent)
+ 	int ret;
+ 
+ 	name = fdt_get_name(fit, parent, NULL);
+-	if (!name || strchr(name, '@'))
+-		return -EADDRNOTAVAIL;
++	/* Skip the check/error if the name matches one of the following strings ... */
++	if ( (strcmp(name, "kernel@1")) &&
++		 (strcmp(name, "script@1")) &&
++		 (strcmp(name, "conf@1")) &&
++		 (strcmp(name, "hash@1")) &&
++		 (strcmp(name, "signature@1")) ) {
++		if (!name || strchr(name, '@'))
++			return -EADDRNOTAVAIL;
++	}
+ 
+ 	fdt_for_each_subnode(node, fit, parent) {
+ 		ret = fdt_check_no_at(fit, node);
