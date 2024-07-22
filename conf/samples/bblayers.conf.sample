@@ -5,26 +5,36 @@ POKY_BBLAYERS_CONF_VERSION = "2"
 BBPATH = "${TOPDIR}"
 BBFILES ?= ""
 
+# Below two variables are required by some phytec layers
+OEROOT := "/build/poky"
+BSPDIR := "${OEROOT}/.."
+
 BBLAYERS ?= " \
   ${TOPDIR}/../meta-hilscher-netfield \
   ${TOPDIR}/../poky/meta \
   ${TOPDIR}/../poky/meta-poky \
   ${TOPDIR}/../meta-hilscher-netfield/meta-oem \
   ${TOPDIR}/../meta-hilscher-netfield-phytec \
+  ${TOPDIR}/../meta-clang \
+  ${TOPDIR}/../meta-rust \
+  ${TOPDIR}/../meta-gplv2 \
+  ${TOPDIR}/../meta-security \
+  ${TOPDIR}/../meta-security/meta-tpm \
   ${TOPDIR}/../meta-openembedded/meta-oe \
   ${TOPDIR}/../meta-openembedded/meta-networking \
   ${TOPDIR}/../meta-openembedded/meta-python \
   ${TOPDIR}/../meta-openembedded/meta-multimedia \
   ${TOPDIR}/../meta-openembedded/meta-filesystems \
   ${TOPDIR}/../meta-openembedded/meta-perl \
+  ${TOPDIR}/../meta-imx/meta-bsp \
+  ${TOPDIR}/../meta-imx/meta-sdk \
+  ${TOPDIR}/../meta-imx/meta-ml \
   ${TOPDIR}/../meta-freescale \
+  ${TOPDIR}/../meta-freescale-distro \
   ${TOPDIR}/../meta-rauc \
-  ${TOPDIR}/../meta-qt6 \
+  ${TOPDIR}/../meta-phytec \
   ${TOPDIR}/../meta-arm/meta-arm \
   ${TOPDIR}/../meta-arm/meta-arm-toolchain \
-  ${TOPDIR}/../meta-ampliphy \
-  ${TOPDIR}/../meta-qt6-phytec \
-  ${TOPDIR}/../meta-phytec \
   ${TOPDIR}/../meta-openembedded/meta-webserver \
   ${TOPDIR}/../meta-swupdate \
 "
