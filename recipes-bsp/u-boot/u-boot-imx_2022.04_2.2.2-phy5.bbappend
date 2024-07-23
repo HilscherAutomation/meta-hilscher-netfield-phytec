@@ -9,6 +9,7 @@ SRC_URI:append = " \
 	file://0001-Changed-config-file-from-machine-to-distro-specific-.patch \
 	file://pollux_defconfig_netfield.patch \
 	file://0002-fix-boot-script-issues-related-to-unit-addressing.patch \
+	file://0003-fix-console-handling.patch \
 	"
 
 inherit dts-sign
