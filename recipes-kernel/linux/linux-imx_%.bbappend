@@ -24,6 +24,8 @@ SRC_URI:append = " \
 	file://disable_msi_if_cifx_found.patch \
 	file://tpm.cfg \
 	file://led_timer.cfg \
+	file://0002-wifi-cfg80211-Add-my-certificate.patch \
+	file://0003-wifi-cfg80211-fix-certs-build-to-not-depend-on-file-.patch \
 "
 
 # Enable module for qemu support
