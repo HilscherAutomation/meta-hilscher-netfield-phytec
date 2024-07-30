@@ -9,7 +9,9 @@ RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
 require recipes-kernel/linux/linux-yocto.inc
 KCONFIG_MODE = "--alldefconfig"
 
+LINUX_VERSION ?= "${PV}"
 KMETA = "kernel-meta"
+KBRANCH = "${BRANCH}"
 SRC_URI:append = " git://git.yoctoproject.org/yocto-kernel-cache;type=kmeta;name=meta;branch=yocto-5.15;destsuffix=${KMETA}"
 SRCREV_meta = "52fd26ad165fc5bef6e38651df39bf552e5bb845"
 SRCREV_FORMAT = "meta_${@d.getVar('SRCREV', True)[:10]}"
