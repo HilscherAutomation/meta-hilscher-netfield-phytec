@@ -6,6 +6,8 @@
 
 #define INITRD_HIGH	"0xffffffffffffffff"
 #define FDT_HIGH	"0xffffffffffffffff"
+#undef CONFIG_SYS_LOAD_ADDR
+#define CONFIG_SYS_LOAD_ADDR 0x40480000
 
 #if defined(CONFIG_IMX_HAB)
 	/* Platform specific initialization */
