@@ -9,6 +9,7 @@ IMAGE_FSTYPES += "squashfs wic.bz2 swu licenses.tar.bz2"
 #############################################################################
 KERNEL_CLASSES:append = " kernel-fitimage"
 KERNEL_IMAGETYPES:append = " fitImage"
+PREFERRED_VERSION_virtual/kernel = "5.15.160-phy1"
 
 #############################################################################
 # Preferred components/settings
