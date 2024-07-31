@@ -17,6 +17,7 @@ LINUX_KERNEL_VERSION="5.15.160"
 # NOTE: PV must be in the format "x.y.z-.*". It cannot begin with a 'v'.
 # NOTE: Keep version in filename in sync with commit id!
 SRCREV = "bd3d95ea50372b31bae094f8eea5432281f358c8"
+SRCREV_meta = "e12e10e0b562f46c1d2f7b71c917d40dd1de339c"
 
 S = "${WORKDIR}/git"
 

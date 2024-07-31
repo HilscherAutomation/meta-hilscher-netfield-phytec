@@ -1,20 +1,13 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/linux-imx-5.15.71:"
-
-SRC_URI:append = " \
-	file://0002-wifi-cfg80211-Add-my-certificate.patch \
-	file://0003-wifi-cfg80211-fix-certs-build-to-not-depend-on-file-.patch \
-"
-
-SRCREV_meta ?= "52fd26ad165fc5bef6e38651df39bf552e5bb845"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:${THISDIR}/${BPN}-${PV}:"
 
 # ----------
 # PREEMPT-RT
 # ----------
 RT_PATCHES = " \
-    file://patch-5.15.71-rt51.patch.gz \
-    file://rt_fix.patch \
+    https://mirrors.edge.kernel.org/pub/linux/kernel/projects/rt/5.15/patch-5.15.160-rt77.patch.xz;name=rtpatch \
     file://enable_preempt_rt.cfg \
 "
+SRC_URI[rtpatch.sha256sum] = "938f198dd9061bf9fdd333d8b299b28663c7a3c8a842665f5f04e11e66a8a445"
 
 PV .= "${@bb.utils.contains('MACHINE_FEATURES', 'preempt-rt', '-rt', '', d)}"
 
