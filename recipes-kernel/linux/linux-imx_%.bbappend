@@ -26,6 +26,7 @@ SRC_URI:append = " \
 	file://tpm.cfg \
 	file://led_timer.cfg \
 	file://gpio_sysfs.cfg \
+	file://netfieldos.cfg \
 "
 
 # Enable module for qemu support
