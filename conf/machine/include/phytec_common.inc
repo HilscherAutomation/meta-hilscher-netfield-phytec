@@ -9,6 +9,7 @@ IMAGE_FSTYPES += "squashfs wic.bz2 swu licenses.tar.bz2"
 #############################################################################
 KERNEL_CLASSES:append = " kernel-fitimage"
 KERNEL_IMAGETYPES:append = " fitImage"
+PREFERRED_VERSION_linux-imx = "${@bb.utils.contains('MACHINE_FEATURES', 'preempt-rt', '5.15.71-rt', '5.15.71', d)}"
 
 #############################################################################
 # Preferred components/settings
@@ -51,7 +52,9 @@ IMAGE_BOOT_FILES = " \
 WIC_IMAGE_DEPENDENCIES:append = " boot-script-fit"
 IMAGE_BOOTLOADER = "imx-boot"
 WICVARS:append = " IMAGE_BOOTLOADER"
-WKS_FILES:${MACHINE} = "hilscher-gpt-boot-rescue-system-lvm.wks.in"
+# Use WKS_FILE as it is need by initrd-api-part-cfg
+WKS_FILE = "hilscher-gpt-boot-rescue-system-lvm.wks.in"
+WKS_FILES:${MACHINE} = "${WKS_FILE}"
 
 WIC_BOOT_PART_CONTENT ??= ""
 WIC_RESCUE_PART_CONTENT ??= ""

@@ -1,10 +1,13 @@
-/* config of hilscher-ucm-imx8m-mini */
-
 /* default is 4 which lead to connection trouble (dhcp/bootp) in some network setups */
 #ifdef CONFIG_BOOTP_ID_CACHE_SIZE
 	#undef CONFIG_BOOTP_ID_CACHE_SIZE
 	#define CONFIG_BOOTP_ID_CACHE_SIZE 10
 #endif
+
+#define INITRD_HIGH	"0xffffffffffffffff"
+#define FDT_HIGH	"0xffffffffffffffff"
+#undef CONFIG_SYS_LOAD_ADDR
+#define CONFIG_SYS_LOAD_ADDR 0x40480000
 
 #if defined(CONFIG_IMX_HAB)
 	/* Platform specific initialization */

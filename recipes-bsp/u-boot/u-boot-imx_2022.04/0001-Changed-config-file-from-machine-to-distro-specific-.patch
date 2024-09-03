@@ -1,14 +1,20 @@
-Changed config file frommachine to distro specific
----
-diff -aurN a/include/configs/imx_env.h b/include/configs/imx_env.h
---- a/include/configs/imx_env.h	2024-02-23 08:39:26.323296177 +0100
-+++ b/include/configs/imx_env.h	2024-02-23 10:10:00.241757572 +0100
-@@ -6,6 +6,8 @@
- #ifndef __IMX_COMMON_CONFIG_H
- #define __IMX_COMMON_CONFIG_H
+diff -aurN a/include/configs/phycore_imx8mp.h b/include/configs/phycore_imx8mp.h
+--- a/include/configs/phycore_imx8mp.h	2024-07-18 11:10:52.593498483 +0200
++++ b/include/configs/phycore_imx8mp.h	2024-07-18 12:50:19.969456714 +0200
+@@ -140,7 +140,8 @@
+ 		"fi;\0" \
+ 	"raucdev=2\0" \
+ 	PHYCORE_RAUC_ENV_BOOTLOGIC \
+-	PHYCORE_FITIMAGE_ENV_BOOTLOGIC
++	PHYCORE_FITIMAGE_ENV_BOOTLOGIC \
++	NETIOT_CONFIG_EXTRA_ENV_SETTINGS
+ 
+ #ifdef CONFIG_ENV_WRITEABLE_LIST
+ /* Set environment flag validation to a list of env vars that must be writable */
+@@ -178,4 +179,6 @@
+ #define CONFIG_USB_MAX_CONTROLLER_COUNT         2
+ #define CONFIG_SERIAL_TAG
  
 +#include "netiot_distro_config.h"
 +
- #ifdef CONFIG_ARM64
-     #define MFG_BOOT_CMD "booti "
- #else
+ #endif /* __PHYCORE_IMX8MP_H */
