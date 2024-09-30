@@ -12,7 +12,6 @@ SRCREV_meta ?= "52fd26ad165fc5bef6e38651df39bf552e5bb845"
 # ----------
 RT_PATCHES = " \
     file://patch-5.15.71-rt51.patch.gz \
-    file://rt_fix.patch \
     file://enable_preempt_rt.cfg \
 "
 
