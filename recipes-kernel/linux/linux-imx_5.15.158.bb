@@ -6,18 +6,22 @@ inherit buildinfo
 inherit fsl-vivante-kernel-driver-handler
 include recipes-kernel/linux/linux-common.inc
 
-SRC_URI:append = " git://github.com/phytec/linux-phytec;protocol=https;branch=v5.15.160-phy"
-
-BRANCH = "v5.15.160-phy"
-GIT_URL = "git://github.com/phytec/linux-phytec;protocol=https"
+BRANCH = "v5.15.71_2.2.2-phy"
+GIT_URL = "git://git.phytec.de/${BPN};protocol=https"
 SRC_URI = "${GIT_URL};branch=${BRANCH}"
 PR = "${INC_PR}.0"
-LINUX_KERNEL_VERSION="5.15.160"
 
 # NOTE: PV must be in the format "x.y.z-.*". It cannot begin with a 'v'.
 # NOTE: Keep version in filename in sync with commit id!
-SRCREV = "bd3d95ea50372b31bae094f8eea5432281f358c8"
+SRCREV = "89670d2d7a48d0a4de09a909e74f8b9c9a1f1eb2"
 SRCREV_meta = "e12e10e0b562f46c1d2f7b71c917d40dd1de339c"
+
+# Update kernel via patch, as it is not yet available mainline
+LINUX_KERNEL_VERSION="5.15.158"
+SRC_URI:append = " \
+    file://0001-Merged-5.15-2.2.x-imx-from-https-github.com-Freescal.patch.gz \
+"
+addtask do_kernel_version_sanity_check after do_patch
 
 S = "${WORKDIR}/git"
 
