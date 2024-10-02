@@ -9,7 +9,7 @@ IMAGE_FSTYPES += "squashfs wic.bz2 swu licenses.tar.bz2"
 #############################################################################
 KERNEL_CLASSES:append = " kernel-fitimage"
 KERNEL_IMAGETYPES:append = " fitImage"
-PREFERRED_VERSION_linux-imx = "${@bb.utils.contains('MACHINE_FEATURES', 'preempt-rt', '5.15.71-rt', '5.15.71', d)}"
+PREFERRED_VERSION_linux-imx = "5.15.158%"
 
 #############################################################################
 # Preferred components/settings
