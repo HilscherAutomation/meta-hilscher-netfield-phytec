@@ -5,6 +5,7 @@ inherit phygittag
 inherit buildinfo
 inherit fsl-vivante-kernel-driver-handler
 include recipes-kernel/linux/linux-common.inc
+include cve-exclusions-5.15.158.inc
 
 BRANCH = "v5.15.71_2.2.2-phy"
 GIT_URL = "git://git.phytec.de/${BPN};protocol=https"
