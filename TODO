@@ -1,0 +1,5 @@
+ - adjust device-tree
+ - automount extmmc when it becomes available
+ - enable secure-boot
+ - remove boot support from mmc1 as we shall only boot from eMMC
+ - enable preempt_rt

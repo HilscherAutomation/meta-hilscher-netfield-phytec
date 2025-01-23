@@ -1,0 +1,77 @@
+#!/bin/sh
+
+platform_init_enabled() {
+	return 0
+}
+
+create_gpio() {
+	gpiobank=$1;
+	gpionum=$2;
+	dir=$3;
+	name=$4;
+	label="";
+
+	case "$gpiobank" in
+	1) label="30200000.gpio" ;;
+	2) label="30210000.gpio" ;;
+	3) label="30220000.gpio" ;;
+	4) label="30230000.gpio" ;;
+	5) label="30240000.gpio" ;;
+	esac
+
+	if [ -z "$label" ]; then
+		__msg "Unknown GPIO bank $gpiobank passed, unable to create GPIO"
+	else
+		gpioindex=-1
+
+		for chip in /sys/class/gpio/gpiochip*; do
+			if grep -q "$label" "$chip/label"; then
+				gpiobase=$(cat "$chip/base")
+				gpioindex=$((gpiobase+gpionum))
+				break
+			fi
+		done
+
+		if [ $gpioindex eq -1 ]; then
+			__msg "Unable to find GPIO $gpiobank:$gpionum"
+		else
+			echo "$gpioindex" > /sys/class/gpio/export
+			echo "$dir" > /sys/class/gpio/gpio${gpio}/direction
+			ln -s /sys/class/gpio/gpio${gpio}/value  "/var/platform/$name"
+		fi
+	fi
+}
+
+platform_init_run() {
+	# We need the pub key loader to access the certificate
+	load_kernel_module pub-key-loader
+
+	__debug "Loading platform devices / drivers ..."
+
+	__debug "Creating platform symlinks ..."
+
+	# DIP switches
+	create_gpio 5 9 "in" "DIP_IN1"
+	create_gpio 5 7 "in" "DIP_IN2"
+	create_gpio 5 8 "in" "DIP_IN3"
+	create_gpio 5 6 "in" "DIP_IN4"
+
+	# Digital Inputs
+	create_gpio 5 26 "in" "DIN1"
+	create_gpio 5 27 "in" "DIN2"
+	create_gpio 5 28 "in" "DIN3"
+	create_gpio 5 29 "in" "DIN4"
+
+	# Digital Outputs
+	create_gpio 5 4  "low"  "nDOUT1_ST"
+	create_gpio 4 27 "high" "DOUT1_EN"
+	create_gpio 5 3  "low"  "nDOUT2_ST"
+	create_gpio 4 24 "high" "DOUT2_EN"
+	create_gpio 4 29 "low"  "nDOUT3_ST"
+	create_gpio 4 26 "high" "DOUT3_EN"
+	create_gpio 4 30 "low"  "nDOUT4_ST"
+	create_gpio 4 21 "high" "DOUT4_EN"
+
+	# UART mux pin
+	create_gpio 1 10 "high" "UART_MUX_S"
+}
