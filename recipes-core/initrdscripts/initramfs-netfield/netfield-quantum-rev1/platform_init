@@ -32,12 +32,12 @@ create_gpio() {
 			fi
 		done
 
-		if [ $gpioindex eq -1 ]; then
+		if [ $gpioindex -eq -1 ]; then
 			__msg "Unable to find GPIO $gpiobank:$gpionum"
 		else
 			echo "$gpioindex" > /sys/class/gpio/export
-			echo "$dir" > /sys/class/gpio/gpio${gpio}/direction
-			ln -s /sys/class/gpio/gpio${gpio}/value  "/var/platform/$name"
+			echo "$dir" > /sys/class/gpio/gpio${gpioindex}/direction
+			ln -s /sys/class/gpio/gpio${gpioindex}/value  "/var/platform/$name"
 		fi
 	fi
 }
