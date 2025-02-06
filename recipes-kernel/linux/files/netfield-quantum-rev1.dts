@@ -162,7 +162,7 @@
 	pinctrl-0 = <&pinctrl_gpio5_inputs &pinctrl_gpio5_outputs>;
 	gpio-line-names =
 		"N/C", "N/C", "N/C", "nDOUT2_ST", "nDOUT1_ST", "N/C", "DIP_IN4", "DIP_IN2",
-		"DIP_IN3", "DIP_IN1", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C",
+		"DIP_IN3", "DIP_IN1", "N/C", "N/C", "ECSPI2_SS0", "N/C", "N/C", "N/C",
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C",
 		"N/C", "N/C", "DIN1", "DIN2", "DIN3", "DIN4", "N/C", "N/C";
 };
@@ -172,13 +172,13 @@
 };
 
 /* TPM */
-&ecspi1 {
+&ecspi2 {
 	#address-cells = <1>;
 	#size-cells = <0>;
-	cs-gpios = <&gpio5 9 GPIO_ACTIVE_LOW>;
+	cs-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
 	num-cs = <1>;
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_ecspi1 &pinctrl_ecspi1_cs>;
+	pinctrl-0 = <&pinctrl_ecspi2 &pinctrl_ecspi2_cs>;
 	status = "okay";
 
 	tpm: tpm_tis@0 {
@@ -386,17 +386,17 @@ csi2_i2c: &i2c2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
 
-	pinctrl_ecspi1: ecspi1grp {
+	pinctrl_ecspi2: ecspi2grp {
 		fsl,pins = <
-			MX8MP_IOMUXC_ECSPI1_MISO__ECSPI1_MISO	0x80
-			MX8MP_IOMUXC_ECSPI1_MOSI__ECSPI1_MOSI	0x80
-			MX8MP_IOMUXC_ECSPI1_SCLK__ECSPI1_SCLK	0x80
+			MX8MP_IOMUXC_ECSPI2_MISO__ECSPI2_MISO	0x80
+			MX8MP_IOMUXC_ECSPI2_MOSI__ECSPI2_MOSI	0x80
+			MX8MP_IOMUXC_ECSPI2_SCLK__ECSPI2_SCLK	0x80
 		>;
 	};
 
-	pinctrl_ecspi1_cs: ecspi1csgrp {
+	pinctrl_ecspi2_cs: ecspi2csgrp {
 		fsl,pins = <
-			MX8MP_IOMUXC_ECSPI1_SS0__GPIO5_IO09	0x00
+			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13	0x00
 		>;
 	};
 
