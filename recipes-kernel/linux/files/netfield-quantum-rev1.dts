@@ -197,6 +197,9 @@
 	phy-handle = <&ethphy1>;
 	status = "okay";
 
+	snps,reset-gpio = <&gpio3 20 GPIO_ACTIVE_LOW>;
+	snps,reset-delays-us = <10 20 200000>;
+
 	mdio {
 		compatible = "snps,dwmac-mdio";
 		#address-cells = <1>;
@@ -464,7 +467,7 @@ csi2_i2c: &i2c2 {
 			MX8MP_IOMUXC_ENET_TD3__ENET_QOS_RGMII_TD3		0x12
 			MX8MP_IOMUXC_ENET_TX_CTL__ENET_QOS_RGMII_TX_CTL		0x12
 			MX8MP_IOMUXC_ENET_TXC__CCM_ENET_QOS_CLOCK_GENERATE_TX_CLK	0x12
-			MX8MP_IOMUXC_SAI1_MCLK__GPIO4_IO20			0x10
+			MX8MP_IOMUXC_SAI5_RXC__GPIO3_IO20				0x10
 		>;
 	};
 
