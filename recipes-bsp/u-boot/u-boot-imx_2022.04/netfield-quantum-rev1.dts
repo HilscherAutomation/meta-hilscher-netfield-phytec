@@ -217,31 +217,6 @@ csi2_i2c: &i2c2 {
 	sda-gpios = <&gpio5 17 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 	scl-gpios = <&gpio5 16 (GPIO_ACTIVE_HIGH | GPIO_OPEN_DRAIN)>;
 	status = "okay";
-
-	/* EEPROM */
-	eeprom@51 {
-		compatible = "atmel,24c02";
-		reg = <0x51>;
-		pagesize = <16>;
-		vcc-supply = <&reg_vcc_3v3_sw>;
-	};
-
-	leds@62 {
-		compatible = "nxp,pca9533";
-		reg = <0x62>;
-
-		led-1 {
-			type = <PCA9532_TYPE_LED>;
-		};
-
-		led-2 {
-			type = <PCA9532_TYPE_LED>;
-		};
-
-		led-3 {
-			type = <PCA9532_TYPE_LED>;
-		};
-	};
 };
 
 /* Mini PCIe */
