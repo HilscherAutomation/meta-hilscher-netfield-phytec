@@ -19,6 +19,12 @@
 		stdout-path = &uart1;
 	};
 
+	aliases {
+		mmc0 = &usdhc2; /* SD-Card */
+		mmc1 = &usdhc3; /* eMMC */
+		/delete-property/ mmc2;
+	};
+
 	reg_vcc_3v3_sw: regulator-vcc-3v3-sw {
 		compatible = "regulator-fixed";
 		regulator-max-microvolt = <3300000>;
