@@ -32,13 +32,26 @@
 		regulator-name = "VCC_3V3_SW";
 	};
 
-	reg_vcc_5v_sw: regulator-vcc-5v-sw {
+	reg_usb3_phy0_pwron: regulator-usb3-phy0-pwron {
 		compatible = "regulator-fixed";
-		regulator-always-on;
-		regulator-boot-on;
-		regulator-max-microvolt = <5000000>;
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_usb3_phy0_pwron>;
+		regulator-name = "usb3_phy0_pwron";
 		regulator-min-microvolt = <5000000>;
-		regulator-name = "VCC_5V_SW";
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
+	reg_usb3_phy1_pwron: regulator-usb3-phy1-pwron {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_usb3_phy1_pwron>;
+		regulator-name = "usb3_phy1_pwron";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
 	};
 
 	reg_usdhc2_vmmc: regulator-usdhc2 {
@@ -134,10 +147,10 @@
 &gpio1 {
 	status = "okay";
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_gpio1_outputs>;
+	pinctrl-0 = <&pinctrl_gpio1_inputs &pinctrl_gpio1_outputs>;
 	gpio-line-names =
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C",
-		"N/C", "N/C", "UART_MUX_S", "N/C", "N/C", "N/C", "N/C", "N/C",
+		"N/C", "N/C", "UART_MUX_S", "N/C", "USB3_PHY0_PWRON", "USB3_PHY0_FAULT", "USB3_PHY1_PWRON", "N/C",
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C",
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C";
 };
@@ -315,7 +328,7 @@ csi2_i2c: &i2c2 {
 
 /* USB */
 &usb3_phy0 {
-	vbus-supply = <&reg_vcc_5v_sw>;
+	vbus-supply = <&reg_usb3_phy0_pwron>;
 	status = "okay";
 };
 
@@ -329,7 +342,7 @@ csi2_i2c: &i2c2 {
 };
 
 &usb3_phy1 {
-	vbus-supply = <&reg_vcc_5v_sw>;
+	vbus-supply = <&reg_usb3_phy1_pwron>;
 	status = "okay";
 };
 
@@ -362,6 +375,19 @@ csi2_i2c: &i2c2 {
 	pinctrl-names = "default";
 	pinctrl-0 = <&pinctrl_hog>;
 
+	/* Regulators */
+	pinctrl_reg_usb3_phy0_pwron: reg-usb3-phy0-pwron {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12		0x0 // Pull Disable, CMOS, Weak pull down, Open Drain Disable, Slow Slew Rate, DSE_X1
+		>;
+	};
+
+	pinctrl_reg_usb3_phy1_pwron: reg-usb3-phy1-pwron {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14		0x0 // Pull Disable, CMOS, Weak pull down, Open Drain Disable, Slow Slew Rate, DSE_X1
+		>;
+	};
+
 	pinctrl_ecspi2: ecspi2grp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI2_MISO__ECSPI2_MISO	0x80
@@ -373,6 +399,12 @@ csi2_i2c: &i2c2 {
 	pinctrl_ecspi2_cs: ecspi2csgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI2_SS0__GPIO5_IO13	0x00
+		>;
+	};
+
+	pinctrl_gpio1_inputs: gpio1_inputs {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13			0x80 /* USB3_PHY0_FAULT */ // Pull Disable, Schmitt, Open Drain Disable, Slow Slew Rate, DSE_X1
 		>;
 	};
 
