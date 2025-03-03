@@ -50,28 +50,45 @@ platform_init_run() {
 
 	__debug "Creating platform symlinks ..."
 
+	# USB 3.0
+	create_gpio 1 13 "in"   "in_usb3_phy0_nfault"
+
+	# M2
+	create_gpio 1 11 "high" "out_m.2_boot"
+	create_gpio 2 8  "in" "in_m.2_sync0"
+	create_gpio 2 9  "in" "in_m.2_sync1"
+
+	# ETH0 with TSN
+	create_gpio 1 7  "in" "in_eth0_syncclk"
+
 	# DIP switches
-	create_gpio 5 9 "in" "DIP_IN1"
-	create_gpio 5 7 "in" "DIP_IN2"
-	create_gpio 5 8 "in" "DIP_IN3"
-	create_gpio 5 6 "in" "DIP_IN4"
+	create_gpio 5 9 "in" "in_dip_in1"
+	create_gpio 5 7 "in" "in_dip_in2"
+	create_gpio 5 8 "in" "in_dip_in3"
+	create_gpio 5 6 "in" "in_dip_in4"
 
 	# Digital Inputs
-	create_gpio 5 26 "in" "DIN1"
-	create_gpio 5 27 "in" "DIN2"
-	create_gpio 5 28 "in" "DIN3"
-	create_gpio 5 29 "in" "DIN4"
+	create_gpio 5 26 "in" "in_din1"
+	create_gpio 5 27 "in" "in_din2"
+	create_gpio 5 28 "in" "in_din3"
+	create_gpio 5 29 "in" "in_din4"
 
 	# Digital Outputs
-	create_gpio 5 4  "low"  "nDOUT1_ST"
-	create_gpio 4 27 "high" "DOUT1_EN"
-	create_gpio 5 3  "low"  "nDOUT2_ST"
-	create_gpio 4 24 "high" "DOUT2_EN"
-	create_gpio 4 29 "low"  "nDOUT3_ST"
-	create_gpio 4 26 "high" "DOUT3_EN"
-	create_gpio 4 30 "low"  "nDOUT4_ST"
-	create_gpio 4 21 "high" "DOUT4_EN"
+	create_gpio 5 4  "in"  "in_ndout1_st"
+	create_gpio 4 27 "low" "out_dout1"
+	create_gpio 5 3  "in"  "in_ndout2_st"
+	create_gpio 4 24 "low" "out_dout2"
+	create_gpio 4 29 "in"  "in_ndout3_st"
+	create_gpio 4 26 "low" "out_dout3"
+	create_gpio 4 30 "in"  "in_ndout4_st"
+	create_gpio 4 21 "low" "out_dout4"
 
 	# UART mux pin
-	create_gpio 1 10 "high" "UART_MUX_S"
+	create_gpio 1 10 "high" "sel_uart2_rs485_nrs232"
+	
+	# LEDs
+	ln -s /sys/class/leds/usr1_green/brightness /var/platform/led_usr1_green
+	ln -s /sys/class/leds/usr1_yellow/brightness /var/platform/led_usr1_yellow
+	ln -s /sys/class/leds/usr2_green/brightness /var/platform/led_usr2_green
+	ln -s /sys/class/leds/usr2_yellow/brightness /var/platform/led_usr2_yellow
 }
