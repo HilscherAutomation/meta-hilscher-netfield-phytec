@@ -1,0 +1,7 @@
+[Unit]
+Description=Mount SD-Card %i
+[Service]
+Type=oneshot
+RemainAfterExit=true
+ExecStart=/usr/sbin/sdcard-mount.sh add %i
+ExecStop=/usr/sbin/sdcard-mount.sh remove %i
