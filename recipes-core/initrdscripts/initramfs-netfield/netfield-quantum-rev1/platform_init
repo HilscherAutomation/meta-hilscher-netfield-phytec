@@ -48,6 +48,11 @@ platform_init_run() {
 
 	__debug "Loading platform devices / drivers ..."
 
+	__debug "Swapping eth0 <=> eth1 ..."
+	ip link set dev eth0 name eth1X
+	ip link set dev eth1 name eth0
+	ip link set dev eth1X name eth1
+
 	__debug "Creating platform symlinks ..."
 
 	# USB 3.0
