@@ -84,20 +84,20 @@ I/O Connector (X9)
  +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
  |  9  | GND_ISO                      |                                                            |                                           |                                        |
  +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
- | 10  | CANL                         | Isolated CAN-Interface                                     |                                           | can0                                   |
+ | 10  | CANL                         |                                                            |                                           |                                        |
+ +-----+------------------------------+ Isolated CAN-Interface referenced to GND_ISO               + unterminated                              + can0                                   +
+ | 11  | CANH                         |                                                            |                                           |                                        |
  +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
- | 11  | CANH                         | Isolated CAN-Interface                                     |                                           | can0                                   |
- +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
- | 12  | RS485_RX-                    | Isolated UART2-Interface (/dev/ttymxc1)                    | Multiplexed output pins                   | /dev/ttymxc1                           |
- +-----+------------------------------+------------------------------------------------------------+                                           +                                        +
- | 13  | RS485_RX+/RS232_RXD          | Isolated UART2-Interface (/dev/ttymxc1)                    |                                           | /var/platform/sel_uart2_rs485_nrs232   |
+ | 12  | RS485_RX-                    |                                                            | Multiplexed output pins                   | /dev/ttymxc1                           |
+ +-----+------------------------------+ Isolated UART2-Interface referenced to GND_ISO             +                                           +                                        +
+ | 13  | RS485_RX+/RS232_RXD          |                                                            |                                           | /var/platform/sel_uart2_rs485_nrs232   |
  |     |                              |                                                            |                                           | (Select-Pin: 0=RS232, 1=RS485)         |
  +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
  | 14  | GND_ISO                      |                                                            |                                           |                                        |
  +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
- | 15  | RS485_TX+                    | Isolated UART2-Interface (/dev/ttymxc1)                    | Multiplexed output pins                   | /dev/ttymxc1                           |
- +-----+------------------------------+------------------------------------------------------------+                                           +                                        +
- | 16  | RS485_TX-/RS232_TXD          | Isolated UART2-Interface (/dev/ttymxc1)                    |                                           | /var/platform/sel_uart2_rs485_nrs232   |
+ | 15  | RS485_TX+                    |                                                            | Multiplexed output pins                   | /dev/ttymxc1                           |
+ +-----+------------------------------+ Isolated UART2-Interface referenced to GND_ISO             +                                           +                                        +
+ | 16  | RS485_TX-/RS232_TXD          |                                                            |                                           | /var/platform/sel_uart2_rs485_nrs232   |
  |     |                              |                                                            |                                           | (Select-Pin: 0=RS232, 1=RS485)         |
  +-----+------------------------------+------------------------------------------------------------+-------------------------------------------+----------------------------------------+
 
@@ -201,22 +201,26 @@ CAN Interface (see I/O Connector (X9))
 
    .. code-block::
 
-     ip link set can0 type can bitrate 1000000
+     ip link set can0 type can bitrate 125000
      ip link set can0 up
      cansend can0 11 22 33 44 AA BB CC DD
 
    .. code-block::
 
-     ip link set can0 type can bitrate 1000000
+     ip link set can0 type can bitrate 125000
      ip link set can0 up
      candump can0
+
+   .. code-block::
+
+     ip -details -statistic link show can0
 
 
 RS485/RS232 (see I/O Connector (X9))
 ------------------------------------
 
- A combined (switchable) UART port is available as /dev/ttymxc1 that can be used for RS484 / RS232 applications by any container.
- The mode can be switched via a GPIO Pins exposed as /var/platform/sel_uart_rs485_nrs232 which defaults to RS485 mode.
+ A combined (switchable) UART port is available as /dev/ttymxc1.
+ The mode of this can be switched via a GPIO Pin exposed as /var/platform/sel_uart_rs485_nrs232 which defaults to RS485 mode.
 
  +--------------------------+-----------------+
  + sel_uart2_rs485_nrs232   | Mode            |
@@ -226,9 +230,20 @@ RS485/RS232 (see I/O Connector (X9))
  | 1                        | RS485 (default) |
  +--------------------------+-----------------+
 
-.. TODO::
-   Provide a system service with configuration (see netfield-compact-x8m)
+ **Specification:**
 
+   - SP330 transceiver
+
+   - 20Mbps RS-485 and 1Mbps RS-232 Data Rates
+
+   - Robust ESD Protection
+
+     - ±15kV IEC 61000-4-2 Air Gap Discharge
+     - ± 8kV IEC 61000-4-2 Contact Discharge
+     - ±15kV Human Body Model (HBM)
+
+ .. TODO::
+   #. Should the RS485 inferface really be a full-duplex interface (4-wires)?
 
 uSD-Card (X4)
 -------------
@@ -287,19 +302,27 @@ Initial Prototype Tests
  | 8           | CAN (X9) tx/rx                  | Connect CAN interface to second device                      |   okay   | 20250227/FME |
  |             |                                 | (think about the termination and GND_ISO)                   |          |              |
  |             |                                 |                                                             |          |              |
- |             |                                 | ip link set can0 type can bitrate 1000000                   |          |              |
+ |             |                                 | ip link set can0 type can bitrate 125000                    |          |              |
  |             |                                 |                                                             |          |              |
  |             |                                 | ip link set can0 up                                         |          |              |
  |             |                                 |                                                             |          |              |
- |             |                                 | cansend can0 11 22 33 44 AA BB CC DD                        |          |              |
- |             |                                 |                                                             |          |              |
  |             |                                 | candump can0                                                |          |              |
- +-------------+---------------------------------+-------------------------------------------------------------+----------+--------------+
- | 9           | RS232 (X9)                      |                                                             |          |              |
  |             |                                 |                                                             |          |              |
- +-------------+---------------------------------+-------------------------------------------------------------+----------+--------------+
- | 10          | RS485 (X9)                      |                                                             |          |              |
+ |             |                                 | cansend can0 0x11 0x22 0x33 0x44 0xaa 0xbb 0xcc 0xdd        |          |              |
  |             |                                 |                                                             |          |              |
+ |             |                                 | ip -details -statistic link show can0                       |          |              |
+ +-------------+---------------------------------+-------------------------------------------------------------+----------+--------------+
+ | 9           | RS232 (X9)                      | echo 0 > /var/platform/sel_uart_rs485_nrs232                |   okay   | 20250305/FME |
+ |             |                                 |                                                             |          |              |
+ |             |                                 | connect RS232 to X9 and open a terminal application         |          |              |
+ |             |                                 |                                                             |          |              |
+ |             |                                 | getty ttymxc1 115200                                        |          |              |
+ +-------------+---------------------------------+-------------------------------------------------------------+----------+--------------+
+ | 10          | RS485 (X9)                      | echo 1 > /var/platform/sel_uart_rs485_nrs232                |          |              |
+ |             |                                 |                                                             |          |              |
+ |             |                                 | connect RS485 to X9 and open a terminal application         |          |              |
+ |             |                                 |                                                             |          |              |
+ |             |                                 | getty ttymxc1 115200                                        |          |              |
  +-------------+---------------------------------+-------------------------------------------------------------+----------+--------------+
  | 11          | USB 2.0 (X7)                    | journalctl -f                                               |   okay   | 20250227/FME |
  |             |                                 |                                                             |          |              |
