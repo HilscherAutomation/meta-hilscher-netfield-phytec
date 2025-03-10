@@ -63,6 +63,9 @@ platform_init_run() {
 	create_gpio 2 8  "in" "in_m.2_sync0"
 	create_gpio 2 9  "in" "in_m.2_sync1"
 
+	# mPCIe
+	create_gpio 1 3 "high" "out_mpcie_nrst"
+
 	# ETH0 with TSN
 	create_gpio 1 7  "in" "in_eth0_syncclk"
 
