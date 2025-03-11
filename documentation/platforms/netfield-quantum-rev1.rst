@@ -123,11 +123,11 @@ Internal DIP Switches (S3)
  +========+===============+=======================+============================+
  | S3.1   | DIP_IN1       | for general purpose   | /var/platform/in_dip_in1   |
  +--------+---------------+-----------------------+----------------------------+
- | S3.2   | DIP_IN2       | for general purpose   | /var/platform/in_dip_in1   |
+ | S3.2   | DIP_IN2       | for general purpose   | /var/platform/in_dip_in2   |
  +--------+---------------+-----------------------+----------------------------+
- | S3.3   | DIP_IN3       | for general purpose   | /var/platform/in_dip_in1   |
+ | S3.3   | DIP_IN3       | for general purpose   | /var/platform/in_dip_in3   |
  +--------+---------------+-----------------------+----------------------------+
- | S3.4   | DIP_IN4       | for general purpose   | /var/platform/in_dip_in1   |
+ | S3.4   | DIP_IN4       | for general purpose   | /var/platform/in_dip_in4   |
  +--------+---------------+-----------------------+----------------------------+
 
 
