@@ -1,0 +1,3 @@
+KERNEL=="mmcblk0p*", SUBSYSTEM=="block", ACTION=="add", RUN+="/bin/systemctl start sdcard-mount@%k.service"
+
+KERNEL=="mmcblk0p*", SUBSYSTEM=="block", ACTION=="remove", RUN+="/bin/systemctl stop sdcard-mount@%k.service"

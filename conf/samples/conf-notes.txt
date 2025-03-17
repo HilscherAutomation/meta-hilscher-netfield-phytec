@@ -5,6 +5,7 @@ You can now run 'bitbake <target>'
 
 Common targets are:
     MACHINE="netfield-phyboard-pollux-imx8mplus" bitbake netfield-image
+    MACHINE="netfield-quantum-rev1" bitbake netfield-image
 
 Other commonly useful commands are:
  - 'devtool' and 'recipetool' handle common recipe tasks

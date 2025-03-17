@@ -27,6 +27,7 @@ SRC_URI:append = " \
 	file://led_timer.cfg \
 	file://gpio_sysfs.cfg \
 	file://netfieldos.cfg \
+    file://rfkill_gpio_ofsupport.patch \
 "
 
 # Enable module for qemu support
@@ -43,3 +44,8 @@ UBOOT_DTB_BINARY=""
 DISABLE_FIT_SIGNATURE_CHECK="1"
 # We need a link in deploydir for rootfs generation, but meta-phytec disabled it
 KERNEL_ARTIFACT_LINK_NAME = "${MACHINE}"
+
+SRC_URI:append:netfield-quantum-rev1 = " file://netfield-quantum-rev1.dts"
+do_patch:append:netfield-quantum-rev1() {
+    cp ${WORKDIR}/netfield-quantum-rev1.dts ${S}/arch/arm64/boot/dts/freescale/
+}
