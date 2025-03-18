@@ -58,7 +58,7 @@
 		pinctrl-0 = <&pinctrl_gpio_leds>;
 
 		act {
-			label = "heartbeat";
+			label = "act_yellow";
 			gpios = <&gpio2 1 GPIO_ACTIVE_LOW>;
 			default-state = "off";
 			linux,default-trigger = "heartbeat";
