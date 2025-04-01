@@ -1,0 +1,88 @@
+Occasionally the comparison of the cookie inside DPM fails with a segmentation fault, which seems to be related to optimized accesses to the netX100 DPM.
+
+[73613.286081] Unable to handle kernel paging request at virtual address ffff80001c6a0004
+[73613.294037] Mem abort info:
+[73613.296837]   ESR = 0x0000000096000021
+[73613.300605]   EC = 0x25: DABT (current EL), IL = 32 bits
+[73613.305947]   SET = 0, FnV = 0
+[73613.309030]   EA = 0, S1PTW = 0
+[73613.312186]   FSC = 0x21: alignment fault
+[73613.316217] Data abort info:
+[73613.319109]   ISV = 0, ISS = 0x00000021
+[73613.322973]   CM = 0, WnR = 0
+[73613.325945] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000059672000
+[73613.332662] [ffff80001c6a0004] pgd=100000013ffff003, p4d=100000013ffff003, pud=100000013fffe003, pmd=1000000103373003, pte=0068000018100713
+[73613.345207] Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
+[73613.351475] Modules linked in: netanalyzer(O+) xt_MASQUERADE nf_conntrack_netlink xfrm_user xfrm_algo xt_addrtype br_netfilter bridge stp llc xt_mark xt_comment ip6t_REJECT nf_reject_ipv6 ip6t_rpfilter ipt_REJECT nf_reject_ipv4 xt_conntrack ip6table_nat ip6table_mangle ip6table_raw ip6table_security iptable_nat nf_nat iptable_mangle iptable_raw nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nfnetlink ip6table_filter ip6_tables iptable_filter ip_tables x_tables dw_hdmi_imx dw_hdmi fsl_imx8_ddr_perf crct10dif_ce snd_soc_imx_hdmi snd_soc_fsl_aud2htx cec imx8mp_hdmi_pavi rtc_snvs at24 snvs_pwrkey imx8mm_thermal fsl_jr_uio spi_imx spi_bitbang flexcan imxdrm galcore drm_kms_helper trusted asn1_encoder zram zsmalloc option usb_wwan usbserial fuse drm ipv6 device_data(O) pub_key_loader(O) imx_sdma [last unloaded: uio_netx]
+[73613.424039] CPU: 0 PID: 2954 Comm: modprobe Tainted: G           O      5.15.158 #1
+[73613.431697] Hardware name: Hilscher netFIELD Quantum Rev.1 (DT)
+[73613.437616] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[73613.444581] pc : __pi_memcmp+0x24/0x110
+[73613.448423] lr : OS_Memcmp+0x10/0x20 [netanalyzer]
+[73613.453239] sp : ffff80000b78b5a0
+[73613.456553] x29: ffff80000b78b5a0 x28: 000000004c42584e x27: 0000000000461bbb
+[73613.463691] x26: ffff8000014ab380 x25: ffff8000014af000 x24: ffff0000c2adf000
+[73613.470830] x23: ffff0000c5b04580 x22: ffff0000ea348000 x21: ffff0000efd20000
+[73613.477969] x20: 00000000ffffffff x19: ffff0000df47d500 x18: fffffffffffeb648
+[73613.485111] x17: 000000040044ffff x16: 00500072b5503510 x15: 0000000000000000
+[73613.492254] x14: ffff800009932580 x13: ffff8000f2077000 x12: 0000000034d4d91d
+[73613.499392] x11: 0000000000000000 x10: 00000000000009f0 x9 : ffff80000b78b480
+[73613.506531] x8 : ffff0000c0e45190 x7 : ffff0000c0b15c80 x6 : 000000872d67f8b7
+[73613.513673] x5 : 594c414e4174656e x4 : 0000000000000000 x3 : 0052455a594c414e
+[73613.520813] x2 : fffffffffffffffc x1 : ffff80001c6a0008 x0 : ffff8000014ab388
+[73613.527957] Call trace:
+[73613.530403]  __pi_memcmp+0x24/0x110
+[73613.533893]  DownloadAndStartFirmware+0x214/0x320 [netanalyzer]
+[73613.539831]  netana_tkit_deviceadd+0x6ac/0x710 [netanalyzer]
+[73613.545506]  netana_registerdevice+0x698/0xa00 [netanalyzer]
+[73613.551181]  netana_pci_probe+0x180/0x200 [netanalyzer]
+[73613.556424]  local_pci_probe+0x40/0xb0
+[73613.560176]  pci_device_probe+0x11c/0x1c0
+[73613.564187]  really_probe.part.0+0x9c/0x310
+[73613.568373]  __driver_probe_device+0x98/0x170
+[73613.572728]  driver_probe_device+0xe8/0x180
+[73613.576913]  __driver_attach+0x94/0x190
+[73613.580749]  bus_for_each_dev+0x74/0xe0
+[73613.584589]  driver_attach+0x24/0x30
+[73613.588165]  bus_add_driver+0x108/0x200
+[73613.591998]  driver_register+0x78/0x130
+[73613.595837]  __pci_register_driver+0x40/0x50
+[73613.600108]  netana_pci_init_module+0x38/0x1000 [netanalyzer]
+[73613.605866]  do_one_initcall+0x54/0x1c0
+[73613.609706]  do_init_module+0x44/0x240
+[73613.613456]  load_module+0x21e8/0x2890
+[73613.617206]  __do_sys_finit_module+0xa8/0xf0
+[73613.621476]  __arm64_sys_finit_module+0x20/0x30
+[73613.626009]  invoke_syscall+0x48/0x120
+[73613.629759]  el0_svc_common.constprop.0+0xd4/0x100
+[73613.634551]  do_el0_svc+0x28/0xa0
+[73613.637868]  el0_svc+0x28/0x80
+[73613.640926]  el0t_64_sync_handler+0xa4/0x130
+[73613.645197]  el0t_64_sync+0x1a0/0x1a4
+[73613.648864] Code: 54000501 f1002042 5400008c f8626803 (f8626825)
+[73613.654958] ---[ end trace 89e54827ae79fefb ]---
+
+
+diff -aurN a/OS_Linux.c b/OS_Linux.c
+--- a/OS_Linux.c	2024-07-26 10:43:26.122686273 +0200
++++ b/OS_Linux.c	2025-04-01 13:23:51.920431415 +0200
+@@ -165,7 +165,18 @@
+ /*****************************************************************************/
+ int OS_Memcmp(const void* pvBuf1, const void* pvBuf2, unsigned long ulSize)
+ {
+-        return memcmp(pvBuf1, pvBuf2, ulSize);
++        int ret = 0;
++        uint8_t *buf1 = (uint8_t*)pvBuf1;
++        uint8_t *buf2 = (uint8_t*)pvBuf2;
++
++        while(ulSize-- > 0) {
++            if(*buf1++ != *buf2++) {
++                ret = 1;
++                break;
++            }
++        }
++
++        return ret;
+ }
+ 
+ /*****************************************************************************/
