@@ -1,3 +1,3 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI:append = " file://use_bytewise_memcmp.patch"
+SRC_URI:append = " file://fix_alignment_panic.patch"

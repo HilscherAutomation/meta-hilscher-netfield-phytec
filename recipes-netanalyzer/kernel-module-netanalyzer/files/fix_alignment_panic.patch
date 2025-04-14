@@ -86,3 +86,74 @@ diff -aurN a/OS_Linux.c b/OS_Linux.c
  }
  
  /*****************************************************************************/
+
+OS_Memset() implementation got optimized and replaced by simple memset. This results in a kernel panic
+when initializing the device filter which may not be aligned (as part of the DPM layout).
+
+[   47.971786] Unable to handle kernel paging request at virtual address ffff80000c4b0604
+[   47.979748] Mem abort info:
+[   47.982569]   ESR = 0x0000000096000061
+[   47.986360]   EC = 0x25: DABT (current EL), IL = 32 bits
+[   47.991735]   SET = 0, FnV = 0
+[   47.994812]   EA = 0, S1PTW = 0
+[   47.997980]   FSC = 0x21: alignment fault
+[   48.002015] Data abort info:
+[   48.004898]   ISV = 0, ISS = 0x00000061
+[   48.008752]   CM = 0, WnR = 1
+[   48.011744] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000059672000
+[   48.018470] [ffff80000c4b0604] pgd=100000013ffff003, p4d=100000013ffff003, pud=100000013fffe003, pmd=10000001214ba003, pte=0068000018100713
+[   48.031026] Internal error: Oops: 0000000096000061 [#1] PREEMPT SMP
+[   48.037297] Modules linked in: netanalyzer(O) xt_MASQUERADE nf_conntrack_netlink xfrm_user xfrm_algo xt_addrtype br_netfilter bridge stp llc xt_ mark xt_comment ip6t_REJECT nf_reject_ipv6 ip6t_rpfilter ipt_REJECT nf_reject_ipv4 xt_conntrack ip6table_nat ip6table_mangle ip6table_raw ip6table_ security iptable_nat nf_nat iptable_mangle iptable_raw nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 ip_set nfnetlink ip6table_filter ip6_tables iptab le_filter ip_tables x_tables crct10dif_ce snd_soc_imx_hdmi dw_hdmi_imx dw_hdmi fsl_imx8_ddr_perf imx8mp_hdmi_pavi at24 cec flexcan snd_soc_fsl_aud2 htx fsl_jr_uio snvs_pwrkey rtc_snvs spi_imx spi_bitbang imx8mm_thermal imxdrm trusted galcore drm_kms_helper asn1_encoder zram zsmalloc option usb_  wwan usbserial fuse drm ipv6 device_data(O) pub_key_loader(O) imx_sdma [last unloaded: uio_netx]
+[   48.109777] CPU: 3 PID: 1936 Comm: netanalyzer_dem Tainted: G           O      5.15.158 #1
+[   48.118044] Hardware name: Hilscher netFIELD Quantum Rev.1 (DT)
+[   48.123962] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   48.130926] pc : __memset+0x4c/0x188
+[   48.134511] lr : OS_Memset+0x1c/0x30 [netanalyzer]
+[   48.139321] sp : ffff80000ae739d0
+[   48.142634] x29: ffff80000ae739d0 x28: ffff80000ae73c58 x27: 0000000000000000
+[   48.149774] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+[   48.156915] x23: ffff8000014ae860 x22: ffff0000e7038000 x21: 0000000000000000
+[   48.164056] x20: ffff0000e7038000 x19: ffff80000ae73a30 x18: ffffffffffffffff
+[   48.171193] x17: 0000000000000000 x16: 0000000000000000 x15: ffff800009ab19c6
+[   48.178334] x14: 0000000000000001 x13: 293231353d657a69 x12: 7328203430363042
+[   48.185474] x11: ffff800009942b70 x10: ffff800009942b70 x9 : 00000000ffffefff
+[   48.192615] x8 : ffff80000c4b0604 x7 : 0000000000000000 x6 : 80000000fffff000
+[   48.199754] x5 : 0000000000000000 x4 : 000000000000000c x3 : 0000000000000000
+[   48.206895] x2 : 0000000000000200 x1 : 0000000000000000 x0 : ffff80000c4b0604
+[   48.214039] Call trace:
+[   48.216485]  __memset+0x4c/0x188
+[   48.219717]  netana_set_filter.part.0+0xf8/0x1f0 [netanalyzer]
+[   48.225564]  netana_open_device+0x188/0x210 [netanalyzer]
+[   48.230975]  netana_open+0xc4/0x120 [netanalyzer]
+[   48.235691]  chrdev_open+0xc4/0x230
+[   48.239181]  do_dentry_open+0x13c/0x460
+[   48.243019]  vfs_open+0x2c/0x40
+[   48.246161]  path_openat+0x960/0x1010
+[   48.249826]  do_filp_open+0x84/0x140
+[   48.253405]  do_sys_openat2+0xbc/0x180
+[   48.257154]  __arm64_sys_openat+0x64/0xb0
+[   48.261163]  invoke_syscall+0x48/0x120
+[   48.264913]  el0_svc_common.constprop.0+0xd4/0x100
+[   48.269707]  do_el0_svc+0x28/0xa0
+[   48.273023]  el0_svc+0x28/0x80
+[   48.276082]  el0t_64_sync_handler+0xa4/0x130
+[   48.280352]  el0t_64_sync+0x1a0/0x1a4
+[   48.284022] Code: d65f03c0 cb0803e4 f2400c84 54000080 (a9001d07)
+[   48.290115] ---[ end trace 7a12918488585e29 ]---
+
+diff --git a/Makefile b/netanalyzer_kernel_mod/Makefile
+index d64c4a4..5217499 100644
+--- a/Makefile
++++ b/Makefile
+@@ -5,7 +5,10 @@ endif
+ ifneq ($(KERNELRELEASE),)
+ # kbuild part of makefile
+ obj-m     := netanalyzer.o
+-ccflags-y += -I$(PWD)/toolkit/Include/ -I$(PWD)/toolkit/ -I$(PWD)/
++
++# NOTE: 'no-tree-loop-distribute-patterns' prevents optimizations that allow replacement of loop assignments
++#       by memset for example. In our case the simple replacement may lead to invalid aligned access.
++ccflags-y += -I$(PWD)/toolkit/Include/ -I$(PWD)/toolkit/ -I$(PWD)/ -fno-tree-loop-distribute-patterns
+ 
+ netanalyzer-objs := netana_enum.o netana.o netana_sysfs.o netana_tk_interface.o \
+ 	OS_Linux.o USER_Linux.o toolkit/netana_functions.o toolkit/netana_toolkit.o \
