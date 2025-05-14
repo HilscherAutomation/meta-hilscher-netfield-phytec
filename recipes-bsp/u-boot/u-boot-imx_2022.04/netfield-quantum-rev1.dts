@@ -10,6 +10,19 @@
 #include <dt-bindings/pwm/pwm.h>
 #include "imx8mp-phycore-som.dtsi"
 
+#define PU             0x140   // Pull-Up enable
+#define PD             0x100   // Pull-Down enable
+#define OD_OUT         0x020   // Open-Drain Output
+#define PP_OUT         0x000   // Push-Pull Output
+#define SCHMITT_IN     0x080   // Schmitt Trigger Input
+#define CMOS_IN        0x000   // CMOS Input
+#define SSR            0x000   // Slow Slew Rate
+#define FSR            0x010   // Fast Slew Rate
+#define DSEx1          0x000   // Drive Strength Field X1
+#define DSEx2          0x004   // Drive Strength Field X2
+#define DSEx4          0x002   // Drive Strength Field X4
+#define DSEx6          0x006   // Drive Strength Field X6
+
 / {
 	model = "Hilscher netFIELD Quantum Rev.1";
 	compatible = "hilscher,netfield-quantum",
@@ -52,6 +65,32 @@
 		enable-active-high;
 		startup-delay-us = <100>;
 		off-on-delay-us = <12000>;
+	};
+
+	/* USB 3.0 */
+	reg_usb3_phy0_pwron: regulator-usb3-phy0-pwron {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_usb3_phy0_pwron>;
+		regulator-name = "usb3_phy0_pwron";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio1 12 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-boot-on;
+	};
+
+	/* USB 2.0 */
+	reg_usb3_phy1_pwron: regulator-usb3-phy1-pwron {
+		compatible = "regulator-fixed";
+		pinctrl-names = "default";
+		pinctrl-0 = <&pinctrl_reg_usb3_phy1_pwron>;
+		regulator-name = "usb3_phy1_pwron";
+		regulator-min-microvolt = <5000000>;
+		regulator-max-microvolt = <5000000>;
+		gpio = <&gpio1 14 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		regulator-boot-on;
 	};
 
 	leds {
@@ -120,10 +159,10 @@
 &gpio1 {
 	status = "okay";
 	pinctrl-names = "default";
-	pinctrl-0 = <&pinctrl_gpio1_outputs>;
+	pinctrl-0 = <&pinctrl_gpio1_inputs &pinctrl_gpio1_outputs>;
 	gpio-line-names =
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C",
-		"N/C", "N/C", "UART_MUX_S", "N/C", "N/C", "N/C", "N/C", "N/C",
+		"N/C", "N/C", "UART_MUX_S", "N/C", "USB3_PHY0_PWRON", "USB3_PHY0_nFAULT", "USB3_PHY1_PWRON", "N/C",
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C",
 		"N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C", "N/C";
 };
@@ -271,9 +310,9 @@ csi2_i2c: &i2c2 {
 	status = "okay";
 };
 
-/* USB */
+/* USB 3.0 */
 &usb3_phy0 {
-	vbus-supply = <&reg_vcc_5v_sw>;
+	vbus-supply = <&reg_usb3_phy0_pwron>;
 	status = "okay";
 };
 
@@ -286,8 +325,9 @@ csi2_i2c: &i2c2 {
 	status = "okay";
 };
 
+/* USB 2.0 */
 &usb3_phy1 {
-	vbus-supply = <&reg_vcc_5v_sw>;
+	vbus-supply = <&reg_usb3_phy1_pwron>;
 	status = "okay";
 };
 
@@ -331,6 +371,12 @@ csi2_i2c: &i2c2 {
 	pinctrl_ecspi1_cs: ecspi1csgrp {
 		fsl,pins = <
 			MX8MP_IOMUXC_ECSPI1_SS0__GPIO5_IO09	0x00
+		>;
+	};
+
+	pinctrl_gpio1_inputs: gpio1_inputs {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13			(SCHMITT_IN) // USB3_PHY0_FAULT
 		>;
 	};
 
@@ -453,7 +499,6 @@ csi2_i2c: &i2c2 {
 		fsl,pins = <
 			MX8MP_IOMUXC_GPIO1_IO08__GPIO1_IO08	0x41
 			MX8MP_IOMUXC_GPIO1_IO11__GPIO1_IO11	0x61
-			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14	0x41
 		>;
 	};
 
@@ -470,9 +515,17 @@ csi2_i2c: &i2c2 {
 		>;
 	};
 
-	pinctrl_usb1_vbus: usb1grp {
+	/* USB 3.0 */
+	pinctrl_reg_usb3_phy0_pwron: reg-usb3-phy0-pwron {
 		fsl,pins = <
-			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12     0x19
+			MX8MP_IOMUXC_GPIO1_IO12__GPIO1_IO12		(PP_OUT|SSR|DSEx1)
+		>;
+	};
+
+	/* USB 2.0 */
+	pinctrl_reg_usb3_phy1_pwron: reg-usb3-phy1-pwron {
+		fsl,pins = <
+			MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14		(PP_OUT|SSR|DSEx1)
 		>;
 	};
 
