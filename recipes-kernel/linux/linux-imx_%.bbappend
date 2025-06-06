@@ -7,7 +7,8 @@ RDEPENDS_${KERNEL_PACKAGE_NAME}-base = ""
 # Add support for yocto-kernel-cache
 # ----------------------------------
 require recipes-kernel/linux/linux-yocto.inc
-KCONFIG_MODE = "--alldefconfig"
+# Disabled kconfig to avoid modules configured with =y being reconfigured to =m
+#KCONFIG_MODE = "--alldefconfig"
 
 LINUX_VERSION ?= "${PV}"
 KMETA = "kernel-meta"
@@ -21,12 +22,13 @@ KERNEL_FEATURES:append = " features/bluetooth/bluetooth.scc features/bluetooth/b
 KERNEL_FEATURES:remove = " features/tpm/tpm.scc"
 
 SRC_URI:append = " \
-	file://defconfig \
-	file://disable_msi_if_cifx_found.patch \
-	file://tpm.cfg \
-	file://led_timer.cfg \
-	file://gpio_sysfs.cfg \
-	file://netfieldos.cfg \
+    file://defconfig \
+    file://tpm.cfg \
+    file://led_timer.cfg \
+    file://gpio_sysfs.cfg \
+    file://netfieldos.cfg \
+    ${@bb.utils.contains('IMAGE_FEATURES', 'debug-tweaks', 'file://debug.cfg', '', d)} \
+    file://disable_msi_if_cifx_found.patch \
     file://rfkill_gpio_ofsupport.patch \
 "
 
