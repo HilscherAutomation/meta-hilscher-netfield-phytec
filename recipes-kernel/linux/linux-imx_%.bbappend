@@ -27,6 +27,7 @@ SRC_URI:append = " \
     file://disable_msi_if_cifx_found.patch \
     file://gpio_sysfs.cfg \
     file://led_timer.cfg \
+    file://lte.cfg \
     file://netfieldos.cfg \
     file://rfkill_gpio_ofsupport.patch \
     file://tpm.cfg \
