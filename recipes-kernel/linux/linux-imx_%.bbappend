@@ -22,14 +22,14 @@ KERNEL_FEATURES:append = " features/bluetooth/bluetooth.scc features/bluetooth/b
 KERNEL_FEATURES:remove = " features/tpm/tpm.scc"
 
 SRC_URI:append = " \
-    file://defconfig \
-    file://tpm.cfg \
-    file://led_timer.cfg \
-    file://gpio_sysfs.cfg \
-    file://netfieldos.cfg \
     ${@bb.utils.contains('IMAGE_FEATURES', 'debug-tweaks', 'file://debug.cfg', '', d)} \
+    file://defconfig \
     file://disable_msi_if_cifx_found.patch \
+    file://gpio_sysfs.cfg \
+    file://led_timer.cfg \
+    file://netfieldos.cfg \
     file://rfkill_gpio_ofsupport.patch \
+    file://tpm.cfg \
 "
 
 # Enable module for qemu support
