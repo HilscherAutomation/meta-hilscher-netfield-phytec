@@ -310,6 +310,10 @@ csi2_i2c: &i2c2 {
 };
 
 /* RTC */
+&snvs_rtc {
+	status = "disabled";
+};
+
 &rv3028 {
 	trickle-resistor-ohms = <3000>;
 };
