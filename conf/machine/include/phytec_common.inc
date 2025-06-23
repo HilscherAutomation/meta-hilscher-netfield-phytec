@@ -22,7 +22,7 @@ HILSCHER_RESCUE_IMAGE ??= "hilscher-rescue-image"
 #############################################################################
 PLATFORM_SIGN ??= "1"
 
-KEYS_DIR .= "${TOPDIR}/keys"
+KEYS_DIR = "/work/keys"
 KEYS_IMAGE_SIGN_PRIV ??= "${KEYS_DIR}/debug.key"
 KEYS_IMAGE_SIGN_CERT ??= "${KEYS_DIR}/debug.crt"
 KEYS_IMAGE_SIGN_CERT_DER ??= "${KEYS_DIR}/debug.crt.der"
